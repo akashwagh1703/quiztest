@@ -5,42 +5,56 @@ import path from 'path';
 import cors from 'cors';
 
 const app = express();
-app.use(cors()); // Enable CORS
 const PORT = 5000;
+const USERS_FILE = path.resolve('public', 'users.json');
 
-// Middleware to parse JSON
+// Middleware
 app.use(bodyParser.json());
+app.use(cors());
 
-// Endpoint to save user data
-app.post('/save-user', (req, res) => {
-    const userData = req.body;
-    const filePath = path.resolve('public', 'userData.json');
+// Helper function to read/write users.json
+const readUsers = () => {
+    if (fs.existsSync(USERS_FILE)) {
+        const data = fs.readFileSync(USERS_FILE, 'utf8');
+        return JSON.parse(data || '[]');
+    }
+    return [];
+};
 
-    // Check if the file exists
-    fs.readFile(filePath, 'utf8', (err, data) => {
-        let users = [];
-        if (!err && data) {
-            users = JSON.parse(data); // Parse existing data
-        }
+const writeUsers = (users) => {
+    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), 'utf8');
+};
 
-        // Add new user data
-        users.push(userData);
+// Register User Endpoint
+app.post('/register', (req, res) => {
+    const { name, email, phone, password } = req.body;
+    const users = readUsers();
 
-        // Write updated data to file
-        fs.writeFile(filePath, JSON.stringify(users, null, 2), (writeErr) => {
-            if (writeErr) {
-                console.error('Error writing to file:', writeErr);
-                return res.status(500).send('Failed to save user data.');
-            }
-            res.status(200).send('User data saved successfully.');
-        });
-    });
+    // Check if the email already exists
+    if (users.find((user) => user.email === email)) {
+        return res.status(400).json({ message: 'Email already registered' });
+    }
+
+    // Save new user
+    users.push({ name, email, phone, password });
+    writeUsers(users);
+    res.status(201).json({ message: 'User registered successfully' });
 });
 
-// Serve the public folder
-app.use(express.static(path.resolve('public')));
+// Login Endpoint
+app.post('/login', (req, res) => {
+    const { email, password } = req.body;
+    const users = readUsers();
+
+    const user = users.find((u) => u.email === email && u.password === password);
+    if (!user) {
+        return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    res.status(200).json({ message: 'Login successful', user });
+});
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running at http://localhost:${PORT}`);
 });

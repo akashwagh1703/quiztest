@@ -1,18 +1,18 @@
-// App.jsx
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Use Routes instead of Switch
-import UserForm from './pages/UserForm';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import UserRegistration from './pages/UserRegistration';
+import UserLogin from './pages/UserLogin';
 import QuizTest from './pages/QuizTest';
 
-const App = () => {
-  return (
-    <Router>
-      <Routes> {/* Use Routes instead of Switch */}
-        <Route path="/" element={<UserForm />} /> {/* Use element instead of component */}
-        <Route path="/quiz-test" element={<QuizTest />} /> {/* Use element instead of component */}
-      </Routes>
-    </Router>
-  );
-};
+function App() {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<UserRegistration />} />
+                <Route path="/login" element={<UserLogin />} />
+                <Route path="/quiz-test" element={<QuizTest />} />
+            </Routes>
+        </Router>
+    );
+}
 
 export default App;
