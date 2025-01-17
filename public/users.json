@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Akash Wagh",
+    "email": "akash.wagh@esds.co.in",
+    "phone": "7020527719",
+    "password": "$2a$10$G2H2wej7HsGeqTVCl9.HG.3/Qbi0X5dnSRL.lU6YsDCewef99Wad."
+  },
+  {
+    "name": "Vaishnavi Date",
+    "email": "vaishnavidate@test.com",
+    "phone": "9875469875",
+    "password": "123456"
+  },
+  {
+    "name": "Test User",
+    "email": "testuser@test.com",
+    "phone": "9874563542",
+    "password": "123456"
+  }
+]

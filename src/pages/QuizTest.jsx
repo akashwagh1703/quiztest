@@ -21,7 +21,7 @@ const QuizTest = () => {
     useEffect(() => {
         // Redirect to UserForm if user data is not found
         if (!user) {
-            navigate('/'); // Redirect to UserForm page
+            navigate('/user-login'); // Redirect to UserForm page
         } else {
             // Fetch quiz data if user data exists and if it has not been fetched before
             if (quizData.length === 0) {
