@@ -1,0 +1,135 @@
+/* Gradient Header */
+.bg-gradient {
+    background: linear-gradient(to right, #0062E6, #33AEFF);
+}
+
+/* Hero Section Animation */
+.hero-section {
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    animation: fadeIn 3s ease-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Carousel Styling */
+.carousel-item img {
+    object-fit: cover;
+    height: 500px;
+}
+
+/* Hover Effects on Cards */
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+}
+
+/* Footer Styling */
+.footer {
+    background-color: #333;
+    color: #fff;
+}
+
+.footer a {
+    text-decoration: none;
+    color: #bbb;
+}
+
+.footer a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* Custom Button Styles */
+.btn-outline-light {
+    border-color: #fff;
+}
+
+.btn-outline-light:hover {
+    background-color: #fff;
+    color: #333;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+    .carousel-inner img {
+        height: 300px;
+    }
+}
+
+.carousel-inner img {
+    object-fit: cover;
+    /* Ensures that images cover the entire container */
+    height: 500px;
+    /* Fixed height for the carousel */
+}
+
+/* Optional: Add smooth transition for captions */
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 15px;
+    transition: opacity 0.5s ease;
+}
+
+.carousel-item:hover .carousel-caption {
+    opacity: 1;
+    /* Make caption visible when hovering */
+}
+
+
+/* Gradient Header */
+.bg-gradient {
+    background: linear-gradient(to right, #00c6ff, #0072ff);
+}
+
+/* Slideshow Styling */
+.carousel-item img {
+    object-fit: cover;
+    /* Ensures images fit the container */
+    height: 400px;
+    /* Makes images not too large */
+}
+
+/* Hover Effect on Service Cards */
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+}
+
+/* Footer Styling */
+.footer {
+    background-color: #333;
+    color: #fff;
+}
+
+.footer a {
+    text-decoration: none;
+    color: #bbb;
+}
+
+.footer a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* Button Styling */
+.btn-outline-light {
+    border-color: #fff;
+}
+
+.btn-outline-light:hover {
+    background-color: #fff;
+    color: #333;
+}
