@@ -44,7 +44,7 @@ app.post('/register', (req, res) => {
     }
 
     // Save new user without hashing the password
-    users.push({ name, email: normalizedEmail, phone, password });
+    users.push({ name, email: normalizedEmail, phone, password, history: [] });
     writeUsers(users);
     res.status(201).json({ message: 'User registered successfully.' });
 });
@@ -62,20 +62,7 @@ app.post('/login', (req, res) => {
         const normalizedEmail = email.trim().toLowerCase();
         const user = users.find((user) => user.email.toLowerCase() === normalizedEmail);
 
-        console.log('Normalized Email:', normalizedEmail);
-        console.log('User Found:', user);
-
-        if (!user) {
-            console.log('No user found with email:', normalizedEmail);
-            return res.status(401).json({ message: 'Invalid email or password.' });
-        }
-
-        console.log('Input Password:', password);
-        console.log('Stored Password:', user.password);
-
-        // Compare plaintext password directly
-        if (password !== user.password) {
-            console.log('Passwords do not match.');
+        if (!user || password !== user.password) {
             return res.status(401).json({ message: 'Invalid email or password.' });
         }
 
@@ -88,6 +75,60 @@ app.post('/login', (req, res) => {
         });
     } catch (error) {
         console.error('Login error:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
+});
+
+// Save User Result Endpoint
+app.post('/save-result', (req, res) => {
+    const { email, score, outof, category } = req.body;
+    const date = new Date().toISOString();
+
+    if (!email || score === undefined || outof === undefined || !category) {
+        return res.status(400).json({ message: 'Email, score, and category are required.' });
+    }
+
+    try {
+        const users = readUsers();
+        const user = users.find((u) => u.email === email);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        if (!user.history) {
+            user.history = [];
+        }
+
+        user.history.push({ date, score, outof, category });
+        writeUsers(users);
+
+        res.json({ message: 'Result saved successfully.', user });
+    } catch (error) {
+        console.error('Error saving result:', error);
+        res.status(500).json({ message: 'Failed to save result.' });
+    }
+});
+
+// Fetch User Results
+app.get('/user-results', (req, res) => {
+    const { email } = req.query; // Extract email from query params
+
+    if (!email) {
+        return res.status(400).json({ message: 'Email is required.' });
+    }
+
+    try {
+        const users = readUsers();
+        const user = users.find((u) => u.email === email);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        res.json({ user });
+    } catch (error) {
+        console.error('Error fetching user results:', error);
         res.status(500).json({ message: 'Internal server error.' });
     }
 });

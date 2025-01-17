@@ -28,7 +28,7 @@ const UserForm = () => {
 
             if (response.ok) {
                 localStorage.setItem('userData', JSON.stringify(userData));
-                navigate('/quiz-test');
+                navigate('/quiz-dashbord');
             } else {
                 console.error('Failed to save user data.');
             }

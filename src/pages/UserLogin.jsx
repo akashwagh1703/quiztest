@@ -43,7 +43,7 @@ const UserLogin = () => {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("userData", JSON.stringify(data.user));
-        navigate("/quiz-test");
+        navigate("/quiz-dashbord");
       } else {
         const data = await response.json();
         toast.error(data.message || "Login failed");
