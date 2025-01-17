@@ -3,18 +3,26 @@
     "name": "Akash Wagh",
     "email": "akash.wagh@esds.co.in",
     "phone": "7020527719",
-    "password": "$2a$10$G2H2wej7HsGeqTVCl9.HG.3/Qbi0X5dnSRL.lU6YsDCewef99Wad."
-  },
-  {
-    "name": "Vaishnavi Date",
-    "email": "vaishnavidate@test.com",
-    "phone": "9875469875",
-    "password": "123456"
-  },
-  {
-    "name": "Test User",
-    "email": "testuser@test.com",
-    "phone": "9874563542",
-    "password": "123456"
+    "password": "123456",
+    "history": [
+      {
+        "date": "2025-01-17T13:47:44.130Z",
+        "score": 17,
+        "outof": 30,
+        "category": "React JS Basics"
+      },
+      {
+        "date": "2025-01-17T13:54:22.963Z",
+        "score": 20,
+        "outof": 30,
+        "category": "React JS Basics"
+      },
+      {
+        "date": "2025-01-17T14:20:19.692Z",
+        "score": 14,
+        "outof": 32,
+        "category": "PHP"
+      }
+    ]
   }
 ]

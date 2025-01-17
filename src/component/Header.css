@@ -1,0 +1,62 @@
+/* Optional: Custom styles for the dropdown */
+.dropdown-menu {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* Make sure the body and HTML elements fill the height */
+body,
+html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content wrapper */
+.main-content {
+    flex-grow: 1;
+}
+
+/* Footer styling */
+.footer-container {
+    background-color: #f8f9fa;
+    /* Light background for footer */
+    border-top: 1px solid #e0e0e0;
+    /* Slight border separation */
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer-social-links {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.footer-social-link {
+    font-size: 18px;
+    color: #333;
+    text-decoration: none;
+}
+
+.footer-social-link:hover {
+    color: #007bff;
+}
+
+.footer-btn {
+    width: 100%;
+    font-size: 14px;
+}

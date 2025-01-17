@@ -1,0 +1,52 @@
+.video-container {
+    position: fixed;
+    bottom: 20px;
+    /* Position from the bottom */
+    right: 20px;
+    /* Position from the right */
+    width: 100px;
+    /* Small size for the container */
+    height: 100px;
+    /* Small size for the container */
+    border-radius: 50%;
+    /* Make it round */
+    overflow: hidden;
+    /* Hide the overflow of video */
+    background-color: #007bff;
+    /* Optional background color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 9999999;
+}
+
+.video-feed {
+    width: 100%;
+    /* Fill the container */
+    height: 100%;
+    /* Fill the container */
+    object-fit: cover;
+    /* Ensure the video fills the container while maintaining its aspect ratio */
+    border-radius: 50%;
+    /* Make the video itself round */
+}
+
+.idle-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent overlay */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    border-radius: 50%;
+    /* Make the overlay round */
+    pointer-events: none;
+    /* Allow clicks to pass through the overlay */
+}

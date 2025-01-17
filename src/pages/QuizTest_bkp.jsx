@@ -3,10 +3,8 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate for redire
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Footer from '../component/Footer';
 import Header from '../component/Header';
-import SaveResult from '../component/SaveResult';
-// import CameraTracking from '../component/CameraTracking';
 
-const QuizTest = ({ fetchFrom, technology }) => {
+const QuizTest = () => {
     const [quizData, setQuizData] = useState([]); // Array of categories (e.g., React Basics, Node.js)
     const [loading, setLoading] = useState(true); // To track the loading state
     const [score, setScore] = useState(0); // User's score
@@ -27,7 +25,7 @@ const QuizTest = ({ fetchFrom, technology }) => {
         } else {
             // Fetch quiz data if user data exists and if it has not been fetched before
             if (quizData.length === 0) {
-                fetch(`/${fetchFrom}`)
+                fetch('/reactJSQuizData.json')
                     .then((response) => {
                         if (!response.ok) {
                             throw new Error('Failed to fetch quiz data');
@@ -86,11 +84,10 @@ const QuizTest = ({ fetchFrom, technology }) => {
     const currentQuestion = currentCategory ? currentCategory.questions[currentQuestionIndex] : null;
     const questionKey = `${currentCategoryIndex}-${currentQuestionIndex}`;
 
-    const totalQuestions = quizData.reduce((sum, category) => sum + category.questions.length, 0);
-
     return (
         <>
-            {/* <CameraTracking /> */}
+            {/* Header Component */}
+            <Header user={user} />
             <div className="container d-flex justify-content-center align-items-center py-5 min-vh-100">
                 {/* Center the content */}
                 <div className="card shadow-lg rounded-lg w-100 w-md-75 w-lg-50">
@@ -117,18 +114,10 @@ const QuizTest = ({ fetchFrom, technology }) => {
 
                         {showScore ? (
                             <div className="text-center">
-                                <h2 className="mb-4">Your Score: {score} / {totalQuestions}</h2>
+                                <h2 className="mb-4">Your Score: {score} / {quizData.reduce((sum, category) => sum + category.questions.length, 0)}</h2>
                                 <p className="mb-4">
-                                    {score >= totalQuestions / 2 ? 'Great job!' : 'Better luck next time!'}
+                                    {score >= quizData.reduce((sum, category) => sum + category.questions.length, 0) / 2 ? 'Great job!' : 'Better luck next time!'}
                                 </p>
-
-                                {/* Save Result Component */}
-                                <SaveResult
-                                    email={user.email}
-                                    score={score}
-                                    outof={totalQuestions}
-                                    category={technology || 'Unknown'}
-                                />
                                 <button
                                     className="btn btn-success btn-lg mt-3"
                                     onClick={() => {
@@ -208,6 +197,8 @@ const QuizTest = ({ fetchFrom, technology }) => {
                     </div>
                 </div>
             </div>
+            {/* Footer Component */}
+            <Footer user={user} />
         </>
     );
 };

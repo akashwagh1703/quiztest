@@ -1,17 +1,25 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import UserRegistration from './pages/UserRegistration';
 import UserLogin from './pages/UserLogin';
-import QuizTest from './pages/QuizTest';
 import Home from './pages/Home';
+import QuizDashboard from './component/QuizDashboard';
+import ReactJS from './pages/ReactJS';
+import PastResults from './pages/PastResults';
+import PHP from './pages/PHP';
 
 function App() {
+    const user = JSON.parse(localStorage.getItem('userData')) || null;
     return (
         <Router>
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/user-register" element={<UserRegistration />} />
                 <Route path="/user-login" element={<UserLogin />} />
-                <Route path="/quiz-test" element={<QuizTest />} />
+                <Route path="/react-js" element={<ReactJS />} />
+                <Route path="/php" element={<PHP />} />
+                <Route path="/quiz-dashbord" element={<QuizDashboard />} />
+                <Route path="/past-results" element={user ? <PastResults email={user.email} /> : <div>Please log in to view your results.</div>}
+                />
             </Routes>
         </Router>
     );

@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './Footer.css'; // Custom styles for the footer
 
-const Footer = ({ user, onLogout }) => {
+const Footer = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -9,35 +10,41 @@ const Footer = ({ user, onLogout }) => {
         localStorage.removeItem('userData');
         // Navigate to the home page
         navigate('/');
-        // Call the onLogout callback to notify the parent component
-        if (onLogout) {
-            onLogout();
-        }
     };
 
     return (
-        <footer className="py-4 bg-dark text-light">
-            <div className="container text-center">
-                <h5 className="mb-3">User Information</h5>
-                <div className="mb-3">
-                    <p className="mb-1">
-                        <strong>Name:</strong> {user.name}
-                    </p>
-                    <p className="mb-1">
-                        <strong>Email:</strong> {user.email}
-                    </p>
-                    <p className="mb-0">
-                        <strong>Score:</strong> {user.currentScore}
-                    </p>
-                </div>
-                <button
-                    className="btn btn-outline-danger btn-lg mt-3 shadow"
-                    onClick={handleLogout}
-                >
-                    Logout
-                </button>
-                <div className="mt-4">
-                    <small>&copy; {new Date().getFullYear()} Your Company. All rights reserved.</small>
+        <footer className="footer-container py-3">
+            <div className="container">
+                <div className="row text-center text-md-start">
+                    {/* Logout Button Column */}
+                    <div className="col-12 col-md-4 mb-3">
+                        <button
+                            className="btn btn-outline-danger btn-sm footer-btn"
+                            onClick={handleLogout}
+                        >
+                            Logout
+                        </button>
+                    </div>
+
+                    {/* Tech Connect / Social Links Column */}
+                    <div className="col-12 col-md-4 mb-3">
+                        <div className="footer-social-links">
+                            <a href="https://github.com" className="footer-social-link me-3">
+                                <i className="fab fa-github"></i> GitHub
+                            </a>
+                            <a href="https://stackoverflow.com" className="footer-social-link me-3">
+                                <i className="fab fa-stack-overflow"></i> StackOverflow
+                            </a>
+                            <a href="https://dev.to" className="footer-social-link">
+                                <i className="fab fa-dev"></i> DEV.to
+                            </a>
+                        </div>
+                    </div>
+
+                    {/* Copyright Column */}
+                    <div className="col-12 col-md-4 mb-3">
+                        <small>&copy; {new Date().getFullYear()} Your Tech Company. All rights reserved.</small>
+                    </div>
                 </div>
             </div>
         </footer>
