@@ -6,6 +6,7 @@ import QuizDashboard from './component/QuizDashboard';
 import ReactJS from './pages/ReactJS';
 import PastResults from './pages/PastResults';
 import PHP from './pages/PHP';
+import FullStackDeveloper from './pages/FullStackDeveloper';
 
 function App() {
     const user = JSON.parse(localStorage.getItem('userData')) || null;
@@ -17,6 +18,7 @@ function App() {
                 <Route path="/user-login" element={<UserLogin />} />
                 <Route path="/react-js" element={<ReactJS />} />
                 <Route path="/php" element={<PHP />} />
+                <Route path="/full-stack-developer" element={<FullStackDeveloper />} />
                 <Route path="/quiz-dashbord" element={<QuizDashboard />} />
                 <Route path="/past-results" element={user ? <PastResults email={user.email} /> : <div>Please log in to view your results.</div>}
                 />

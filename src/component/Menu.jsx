@@ -36,6 +36,17 @@ const Menu = () => {
                         PHP
                     </NavLink>
                 </li>
+
+                <li className="menu-item">
+                    <NavLink
+                        to="/full-stack-developer"
+                        className={({ isActive }) =>
+                            isActive ? 'menu-link active-link' : 'menu-link'
+                        }
+                    >
+                        Full Stack Developer
+                    </NavLink>
+                </li>
             </ul>
         </nav>
     );

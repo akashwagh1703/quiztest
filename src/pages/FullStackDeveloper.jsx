@@ -4,7 +4,7 @@ import Header from '../component/Header';
 import Footer from '../component/Footer';
 import "./QuizTest.css";
 
-const PHP = () => {
+const FullStackDeveloper = () => {
     const [quizStarted, setQuizStarted] = useState(false);
 
     const startQuiz = () => {
@@ -23,12 +23,12 @@ const PHP = () => {
                             onClick={startQuiz}
                             className="btn btn-primary btn-lg shadow-lg rounded-pill hover:opacity-80"
                         >
-                            Start PHP Quiz
+                            Start Full Stack Developer Quiz
                         </button>
                     </div>
                 ) : (
                     <div className="quiz-container">
-                        <QuizTest fetchFrom='phpQuizData.json' technology='PHP' />
+                        <QuizTest fetchFrom='fullStackDeveloper.json' technology='Full Stack Developer' />
                     </div>
                 )}
             </div>
@@ -38,4 +38,4 @@ const PHP = () => {
     );
 };
 
-export default PHP;
+export default FullStackDeveloper;
