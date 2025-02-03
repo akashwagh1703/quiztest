@@ -10,6 +10,8 @@
     /* Small size for the container */
     border-radius: 50%;
     /* Make it round */
+
+    
     overflow: hidden;
     /* Hide the overflow of video */
     background-color: #007bff;
