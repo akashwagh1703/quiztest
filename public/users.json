@@ -28,6 +28,12 @@
         "score": 49,
         "outof": 62,
         "category": "Full Stack Developer"
+      },
+      {
+        "date": "2025-01-31T13:57:45.498Z",
+        "score": 21,
+        "outof": 50,
+        "category": "AIBots"
       }
     ]
   },
@@ -37,5 +43,25 @@
     "phone": "8754785478",
     "password": "123456",
     "history": []
+  },
+  {
+    "name": "Devesh Jadhav",
+    "email": "deveshjadhav@gmail.com",
+    "phone": "8745698745",
+    "password": "123456",
+    "history": [
+      {
+        "date": "2025-01-31T13:18:25.728Z",
+        "score": 4,
+        "outof": 30,
+        "category": "ReactJS"
+      },
+      {
+        "date": "2025-01-31T13:22:04.132Z",
+        "score": 2,
+        "outof": 30,
+        "category": "ReactJS"
+      }
+    ]
   }
 ]

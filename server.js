@@ -133,6 +133,36 @@ app.get('/user-results', (req, res) => {
     }
 });
 
+// save answer
+app.post('/save-answer', (req, res) => {
+    const { email, question, selectedAnswer, isCorrect } = req.body;
+
+    if (!email || !question || !selectedAnswer) {
+        return res.status(400).json({ message: 'Missing required fields.' });
+    }
+
+    try {
+        const users = readUsers();
+        const user = users.find((u) => u.email === email);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        if (!user.history) {
+            user.history = [];
+        }
+
+        user.history.push({ question, selectedAnswer, isCorrect, date: new Date().toISOString() });
+        writeUsers(users);
+
+        res.json({ message: 'Answer saved successfully.', user });
+    } catch (error) {
+        console.error('Error saving answer:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
+});
+
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);

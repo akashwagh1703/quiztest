@@ -1,59 +1,76 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Footer from '../component/Footer';
-import Header from '../component/Header';
 import SaveResult from '../component/SaveResult';
 // import CameraTracking from '../component/CameraTracking';
 
-const QuizTest = ({ fetchFrom, technology }) => {
-    const [quizData, setQuizData] = useState([]); // Array of categories (e.g., React Basics, Node.js)
-    const [loading, setLoading] = useState(true); // To track the loading state
-    const [score, setScore] = useState(0); // User's score
-    const [showScore, setShowScore] = useState(false); // Flag to show final score
-    const [selectedOptions, setSelectedOptions] = useState({}); // Track selected options for all questions
-    const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0); // Index of current category
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // Index of current question in the current category
-    const navigate = useNavigate(); // Initialize navigate for redirection
 
-    // Get user data from localStorage
+const QuizTest = ({ fetchFrom, technology, exam_time = 900 }) => {
+    const [quizData, setQuizData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [score, setScore] = useState(0);
+    const [showScore, setShowScore] = useState(false);
+    const [selectedOptions, setSelectedOptions] = useState({});
+    const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [examTimer, setExamTimer] = useState(exam_time); // 10 minutes for the entire exam
+    const navigate = useNavigate();
+
+    // console.log('selectedOptions:::',selectedOptions)
+
     const user = JSON.parse(localStorage.getItem('userData')) || null;
 
-    // Fetch quiz data once the component mounts and user data is available
+    // Fetch quiz data
     useEffect(() => {
-        // Redirect to UserForm if user data is not found
         if (!user) {
-            navigate('/user-login'); // Redirect to UserForm page
-        } else {
-            // Fetch quiz data if user data exists and if it has not been fetched before
-            if (quizData.length === 0) {
-                fetch(`/${fetchFrom}`)
-                    .then((response) => {
-                        if (!response.ok) {
-                            throw new Error('Failed to fetch quiz data');
-                        }
-                        return response.json();
-                    })
-                    .then((data) => {
-                        setQuizData(Object.entries(data).map(([category, questions]) => ({ category, questions })));
-                        setLoading(false); // Data has been successfully fetched, stop loading
-                    })
-                    .catch((error) => {
-                        console.error('Error loading quiz data:', error);
-                        setLoading(false); // Stop loading on error
-                    });
-            }
+            navigate('/user-login');
+        } else if (quizData.length === 0) {
+            const fetchQuizData = async () => {
+                try {
+                    const response = await fetch(`/${fetchFrom}`);
+                    if (!response.ok) throw new Error('Failed to fetch quiz data');
+                    const data = await response.json();
+                    const formattedData = Object.entries(data).map(([category, questions]) => ({ category, questions }));
+                    setQuizData(formattedData);
+                } catch (error) {
+                    console.error('Error loading quiz data:', error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchQuizData();
         }
-    }, [user, navigate, quizData.length]); // Add quizData.length as a dependency to prevent continuous fetches
+    }, [user, navigate, fetchFrom, quizData.length]);
+
+    // Exam timer logic
+    useEffect(() => {
+        if (!showScore && examTimer > 0) {
+            const interval = setInterval(() => setExamTimer((prev) => prev - 1), 1000);
+            return () => clearInterval(interval);
+        } else if (examTimer === 0) {
+            setShowScore(true); // End the exam when the timer runs out
+        }
+    }, [examTimer, showScore]);
 
     const handleAnswerClick = (option) => {
         const questionKey = `${currentCategoryIndex}-${currentQuestionIndex}`;
         if (!selectedOptions[questionKey]) {
             setSelectedOptions((prev) => ({ ...prev, [questionKey]: option }));
             if (option === quizData[currentCategoryIndex].questions[currentQuestionIndex].answer) {
-                setScore((prevScore) => prevScore + 1);
+                setScore((prev) => prev + 1);
             }
         }
+
+        // Trigger SaveQuestionAnswer when the user selects an answer
+        const currentQuestion = quizData[currentCategoryIndex].questions[currentQuestionIndex];
+        const correctAnswer = currentQuestion.answer;
+        const email = user.email;
+        <SaveQuestionAnswer
+            email={email}
+            question={currentQuestion.questions}
+            selectedAnswer={option}
+            correctAnswer={correctAnswer}
+        />;
     };
 
     const handleNextClick = () => {
@@ -61,43 +78,68 @@ const QuizTest = ({ fetchFrom, technology }) => {
         if (nextQuestionIndex < quizData[currentCategoryIndex].questions.length) {
             setCurrentQuestionIndex(nextQuestionIndex);
         } else {
-            // Move to the next category if available
             const nextCategoryIndex = currentCategoryIndex + 1;
             if (nextCategoryIndex < quizData.length) {
                 setCurrentCategoryIndex(nextCategoryIndex);
-                setCurrentQuestionIndex(0); // Start from the first question in the next category
+                setCurrentQuestionIndex(0);
             } else {
                 setShowScore(true); // All questions have been completed
             }
         }
     };
 
+    const handleSkipClick = () => {
+        const nextQuestionIndex = currentQuestionIndex + 1;
+
+        if (nextQuestionIndex < quizData[currentCategoryIndex].questions.length) {
+            // Move to the next question within the same category
+            setCurrentQuestionIndex(nextQuestionIndex);
+        } else {
+            const nextCategoryIndex = currentCategoryIndex + 1;
+
+            if (nextCategoryIndex < quizData.length) {
+                // Move to the next category and reset question index
+                setCurrentCategoryIndex(nextCategoryIndex);
+                setCurrentQuestionIndex(0);
+            } else {
+                // If no more questions/categories, end the quiz
+                setShowScore(true);
+            }
+        }
+    };
+
+
+
     const handleBackClick = () => {
         if (currentQuestionIndex > 0) {
-            setCurrentQuestionIndex(currentQuestionIndex - 1);
+            setCurrentQuestionIndex((prev) => prev - 1);
         }
     };
 
     if (loading) {
-        return <div className="text-center mt-5">Loading quiz...</div>; // Show loading message if still fetching
+        return <div className="text-center mt-5">Loading quiz...</div>;
     }
 
     const currentCategory = quizData[currentCategoryIndex];
-    const currentQuestion = currentCategory ? currentCategory.questions[currentQuestionIndex] : null;
+    const currentQuestion = currentCategory?.questions[currentQuestionIndex];
     const questionKey = `${currentCategoryIndex}-${currentQuestionIndex}`;
-
     const totalQuestions = quizData.reduce((sum, category) => sum + category.questions.length, 0);
+
+    // Format the exam timer into minutes and seconds
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+    };
 
     return (
         <>
             {/* <CameraTracking /> */}
             <div className="container d-flex justify-content-center align-items-center py-5 min-vh-100">
-                {/* Center the content */}
                 <div className="card shadow-lg rounded-lg w-100 w-md-75 w-lg-50">
                     <div className="card-header text-center bg-info text-white">
-                        {/* <h1 className="display-4">React Quiz Test</h1> */}
                         <h2 className="display-6">{currentCategoryIndex + 1}. {currentCategory?.category}</h2>
-                        {/* <h4 className="text-muted">{currentCategoryIndex + 1}. {currentCategory?.category}</h4> */}
+                        <h4 className="bg-success p-1">Time Remaining: {formatTime(examTimer)}</h4>
                     </div>
                     <div className="card-body">
                         <div className="progress mb-4">
@@ -105,14 +147,12 @@ const QuizTest = ({ fetchFrom, technology }) => {
                                 className="progress-bar"
                                 role="progressbar"
                                 style={{
-                                    width: currentCategory && currentCategory.questions
-                                        ? `${((currentQuestionIndex + 1) / currentCategory.questions.length) * 100}%`
-                                        : "0%" // Default to 0% if the data is not yet available
+                                    width: currentCategory ? `${((currentQuestionIndex + 1) / currentCategory.questions.length) * 100}%` : '0%'
                                 }}
                                 aria-valuenow={currentQuestionIndex + 1}
                                 aria-valuemin="0"
-                                aria-valuemax={currentCategory ? currentCategory.questions.length : 1} // To prevent division by 0 if data is missing
-                            ></div>
+                                aria-valuemax={currentCategory?.questions.length || 1}
+                            />
                         </div>
 
                         {showScore ? (
@@ -121,8 +161,6 @@ const QuizTest = ({ fetchFrom, technology }) => {
                                 <p className="mb-4">
                                     {score >= totalQuestions / 2 ? 'Great job!' : 'Better luck next time!'}
                                 </p>
-
-                                {/* Save Result Component */}
                                 <SaveResult
                                     email={user.email}
                                     score={score}
@@ -137,6 +175,7 @@ const QuizTest = ({ fetchFrom, technology }) => {
                                         setCurrentQuestionIndex(0);
                                         setSelectedOptions({});
                                         setShowScore(false);
+                                        setExamTimer(exam_time); // Reset the exam timer
                                     }}
                                 >
                                     Restart Quiz
@@ -147,60 +186,57 @@ const QuizTest = ({ fetchFrom, technology }) => {
                                 <div className="card mb-3">
                                     <div className="card-body">
                                         <h3 className="card-title mb-4">
-                                            {currentQuestion && currentQuestion.questions
-                                                ? `Q${currentQuestionIndex + 1}: ${currentQuestion.questions}`
-                                                : 'Loading Question...'}
+                                            {currentQuestion ? `Q${currentQuestionIndex + 1}: ${currentQuestion.questions}` : 'Loading Question...'}
                                         </h3>
-
                                         <ul className="list-group">
-                                            {currentQuestion && currentQuestion.options && currentQuestion.options.length > 0 ? (
-                                                currentQuestion.options.map((option, index) => (
+                                            {currentQuestion?.options?.map((option, index) => {
+                                                const isSelected = selectedOptions[questionKey] === option;
+                                                const isCorrectAnswer = option === currentQuestion.answer;
+                                                const isWrongSelection = isSelected && !isCorrectAnswer;
+
+                                                return (
                                                     <li
                                                         key={index}
-                                                        className={`list-group-item ${selectedOptions[questionKey] === option
-                                                            ? option === currentQuestion.answer
-                                                                ? 'bg-success text-white'
-                                                                : 'bg-danger text-white'
-                                                            : 'bg-light'
-                                                            } shadow-sm mb-2 rounded-lg`}
+                                                        className={`list-group-item ${isSelected && isCorrectAnswer ? 'bg-success text-white' : ''} ${isWrongSelection ? 'bg-danger text-white' : ''} ${!isSelected && isCorrectAnswer && selectedOptions[questionKey] ? 'bg-success text-white' : ''} shadow-sm mb-2 rounded-lg`}
                                                         style={{ cursor: 'pointer' }}
                                                     >
                                                         <button
-                                                            className={`btn btn-link text-decoration-none w-100 text-start ${selectedOptions[questionKey] === option
-                                                                ? ' text-white'
-                                                                : ''
-                                                                }`}
+                                                            className={`btn btn-link text-decoration-none w-100 text-start ${isSelected || (selectedOptions[questionKey] && isCorrectAnswer) ? 'text-white' : ''}`}
                                                             onClick={() => handleAnswerClick(option)}
                                                             disabled={!!selectedOptions[questionKey]}
+                                                            aria-label={`Select option: ${option}`}
                                                         >
                                                             {option}
                                                         </button>
                                                     </li>
-                                                ))
-                                            ) : (
-                                                <li className="list-group-item">Loading options...</li> // Fallback if options are not loaded
-                                            )}
-
+                                                );
+                                            })}
                                         </ul>
                                     </div>
                                 </div>
-
                                 <div className="d-flex justify-content-between mt-4">
                                     <button
                                         className="btn btn-secondary btn-lg"
                                         onClick={handleBackClick}
                                         disabled={currentQuestionIndex === 0}
+                                        aria-label="Previous Question"
                                     >
                                         Back
+                                    </button>
+                                    <button
+                                        className="btn btn-warning btn-lg"
+                                        onClick={handleSkipClick}
+                                        aria-label={currentQuestionIndex === 0}
+                                    >
+                                        Skip
                                     </button>
                                     <button
                                         className="btn btn-primary btn-lg"
                                         onClick={handleNextClick}
                                         disabled={!selectedOptions[questionKey]}
+                                        aria-label={currentCategoryIndex === quizData.length - 1 && currentQuestionIndex === currentCategory.questions.length - 1 ? 'Finish Quiz' : 'Next Question'}
                                     >
-                                        {currentCategoryIndex === quizData.length - 1 && currentQuestionIndex === currentCategory.questions.length - 1
-                                            ? 'Finish'
-                                            : 'Next'}
+                                        {currentCategoryIndex === quizData.length - 1 && currentQuestionIndex === currentCategory.questions.length - 1 ? 'Finish' : 'Next'}
                                     </button>
                                 </div>
                             </div>

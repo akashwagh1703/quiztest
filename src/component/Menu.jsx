@@ -47,6 +47,17 @@ const Menu = () => {
                         Full Stack Developer
                     </NavLink>
                 </li>
+
+                <li className="menu-item">
+                    <NavLink
+                        to="/ai-bots"
+                        className={({ isActive }) =>
+                            isActive ? 'menu-link active-link' : 'menu-link'
+                        }
+                    >
+                        AI-Bots
+                    </NavLink>
+                </li>
             </ul>
         </nav>
     );

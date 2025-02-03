@@ -28,7 +28,7 @@ const PHP = () => {
                     </div>
                 ) : (
                     <div className="quiz-container">
-                        <QuizTest fetchFrom='phpQuizData.json' technology='PHP' />
+                        <QuizTest fetchFrom='phpQuizData.json' technology='PHP' exam_time={1000} />
                     </div>
                 )}
             </div>

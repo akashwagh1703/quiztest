@@ -7,6 +7,8 @@ import ReactJS from './pages/ReactJS';
 import PastResults from './pages/PastResults';
 import PHP from './pages/PHP';
 import FullStackDeveloper from './pages/FullStackDeveloper';
+import TalentEvaluationForm from './pages/TalentEvaluationForm';
+import AIBots from './pages/AIBots';
 
 function App() {
     const user = JSON.parse(localStorage.getItem('userData')) || null;
@@ -19,8 +21,11 @@ function App() {
                 <Route path="/react-js" element={<ReactJS />} />
                 <Route path="/php" element={<PHP />} />
                 <Route path="/full-stack-developer" element={<FullStackDeveloper />} />
+                <Route path="/ai-bots" element={<AIBots />} />
                 <Route path="/quiz-dashbord" element={<QuizDashboard />} />
                 <Route path="/past-results" element={user ? <PastResults email={user.email} /> : <div>Please log in to view your results.</div>}
+                />
+                <Route path="/tef" element={user ? <TalentEvaluationForm /> : <div>Please log in to view your results.</div>}
                 />
             </Routes>
         </Router>

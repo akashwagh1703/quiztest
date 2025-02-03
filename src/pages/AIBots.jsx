@@ -4,7 +4,7 @@ import Header from '../component/Header';
 import Footer from '../component/Footer';
 import "./QuizTest.css";
 
-const FullStackDeveloper = () => {
+const AIBots = () => {
     const [quizStarted, setQuizStarted] = useState(false);
 
     const startQuiz = () => {
@@ -23,12 +23,12 @@ const FullStackDeveloper = () => {
                             onClick={startQuiz}
                             className="btn btn-primary btn-lg shadow-lg rounded-pill hover:opacity-80"
                         >
-                            Start Full Stack Developer Quiz
+                            Start AIBots Quiz
                         </button>
                     </div>
                 ) : (
                     <div className="quiz-container">
-                        <QuizTest fetchFrom='fullStackDeveloper.json' technology='Full Stack Developer' exam_time={1500} />
+                        <QuizTest fetchFrom='AIBots.json' technology='AIBots' exam_time={1000} />
                     </div>
                 )}
             </div>
@@ -38,4 +38,4 @@ const FullStackDeveloper = () => {
     );
 };
 
-export default FullStackDeveloper;
+export default AIBots;

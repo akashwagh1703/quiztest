@@ -28,7 +28,7 @@ const ReactJS = () => {
                     </div>
                 ) : (
                     <div className="quiz-container">
-                        <QuizTest fetchFrom='reactJSQuizData.json' technology='ReactJS' />
+                        <QuizTest fetchFrom='reactJSQuizData.json' technology='ReactJS' exam_time={1000}  />
                     </div>
                 )}
             </div>
