@@ -1,7 +1,4 @@
-// Local 
-// export const BASEURL = "http://localhost";
-// export const NODEURL = "http://localhost:5000/"
+const isLocal = window.location.hostname === "localhost";
 
-// LIVE
-export const BASEURL = "https://quiztest-gilt.vercel.app"
-export const NODEURL = "https://quiztest-gilt.vercel.app:5000/"
+export const BASEURL = isLocal ? "http://localhost" : "https://quiztest-gilt.vercel.app";
+export const APIURL = isLocal ? "http://localhost:5000/" : "https://quiztest-gilt.vercel.app/api/";

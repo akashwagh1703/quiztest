@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NODEURL } from '../config/Constant';
+import { APIURL } from '../config/Constant';
 
 const SaveResult = ({ email, score, outof, category }) => {
     const [loading, setLoading] = useState(false);
@@ -13,7 +13,7 @@ const SaveResult = ({ email, score, outof, category }) => {
         setError('');
 
         try {
-            const response = await fetch(`${NODEURL}save-result`, {
+            const response = await fetch(`${APIURL}save-result`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
