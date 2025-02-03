@@ -25,3 +25,4 @@ node_modules
 
 #public folder user data
 public/userData.json
+.vercel
