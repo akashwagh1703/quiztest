@@ -1,11 +1,14 @@
-import express from 'express';
+// import express from 'express';
 import bodyParser from 'body-parser';
 import fs from 'fs';
 import path from 'path';
 import cors from 'cors';
 import jwt from 'jsonwebtoken'; // For token generation
 
+const express = require("express");
 const app = express();
+
+// const app = express();
 const PORT = 5000;
 const USERS_FILE = path.resolve('public', 'users.json');
 const JWT_SECRET = process.env.JWT_SECRET || '123456789'; // Use environment variable for production
@@ -173,4 +176,5 @@ app.post('/save-answer', (req, res) => {
 //     res.sendFile(path.join(DIST_DIR, 'index.html'));
 // });
 
-export default app;
+// export default app;
+module.exports = app;
