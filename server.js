@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import cors from 'cors';
 import jwt from 'jsonwebtoken'; // For token generation
+import { BASEURL } from './src/config/Constant.js';
 
 const app = express();
 const PORT = 5000;
@@ -165,5 +166,5 @@ app.post('/save-answer', (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`Server running at ${BASEURL}:${PORT}`);
 });

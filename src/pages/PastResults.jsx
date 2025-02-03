@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { NODEURL } from '../config/Constant';
 import Header from '../component/Header';
 import Footer from '../component/Footer';
 import "./PastResults.css";
@@ -12,7 +13,7 @@ const PastResults = ({ email }) => {
         // Fetch user results from the backend
         const fetchResults = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/user-results?email=${email}`);
+                const response = await fetch(`${NODEURL}user-results?email=${email}`);
                 const data = await response.json();
 
                 if (response.ok) {

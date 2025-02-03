@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './QuizDashboard.css'; // Custom styles for the dashboard
+import { NODEURL } from '../config/Constant';
 import Header from './Header';
 import Footer from './Footer';
 
@@ -18,7 +19,7 @@ const QuizDashboard = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/user-results?email=${user.email}`);
+                const response = await fetch(`${NODEURL}user-results?email=${user.email}`);
                 const data = await response.json();
 
                 if (response.ok) {
