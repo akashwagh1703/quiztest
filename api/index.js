@@ -137,24 +137,43 @@ async function registerUser(req, res) {
 async function loginUser(req, res) {
     const { email, password } = req.body;
 
+    // Validate input
     if (!email || !password) {
         return res.status(400).json({ message: 'Email and password are required.' });
     }
 
     try {
+        // Read users and normalize email
         const users = await readUsers();
         const normalizedEmail = email.trim().toLowerCase();
+
+        // Find user by normalized email
         const user = users.find((user) => user.email.toLowerCase() === normalizedEmail);
 
-        if (!user || password !== user.password) {
+        // Validate user credentials
+        if (!user) {
             return res.status(401).json({ message: 'Invalid email or password.' });
         }
 
-        const token = jwt.sign({ email: user.email }, JWT_SECRET, { expiresIn: '1h' });
+        // Simple password comparison (consider using bcrypt in production)
+        if (password !== user.password) {
+            return res.status(401).json({ message: 'Invalid email or password.' });
+        }
 
+        // Generate JWT token
+        const token = jwt.sign(
+            { email: user.email, name: user.name },
+            JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        // Respond with user info and token
         res.json({
             message: 'Login successful.',
-            user: { email: user.email, name: user.name },
+            user: {
+                email: user.email,
+                name: user.name
+            },
             token,
         });
     } catch (error) {
@@ -168,6 +187,7 @@ async function saveResult(req, res) {
     const { email, score, outof, category } = req.body;
     const date = new Date().toISOString();
 
+    // Validate input
     if (!email || score === undefined || outof === undefined || !category) {
         return res.status(400).json({ message: 'Email, score, and category are required.' });
     }
@@ -176,18 +196,30 @@ async function saveResult(req, res) {
         const users = await readUsers();
         const user = users.find((u) => u.email === email);
 
+        // Check if user exists
         if (!user) {
             return res.status(404).json({ message: 'User not found.' });
         }
 
-        if (!user.history) {
-            user.history = [];
-        }
+        // Ensure history exists
+        user.history = user.history || [];
 
-        user.history.push({ date, score, outof, category });
+        // Add new result to history
+        user.history.push({
+            date,
+            score,
+            outof,
+            category
+        });
+
+        // Save updated users
         await writeUsers(users);
 
-        res.json({ message: 'Result saved successfully.', user });
+        // Respond with success message
+        res.status(200).json({
+            message: 'Result saved successfully.',
+            result: { date, score, outof, category }
+        });
     } catch (error) {
         console.error('Error saving result:', error);
         res.status(500).json({ message: 'Failed to save result.' });
@@ -198,6 +230,7 @@ async function saveResult(req, res) {
 async function getUserResults(req, res) {
     const { email } = req.query;
 
+    // Validate input
     if (!email) {
         return res.status(400).json({ message: 'Email is required.' });
     }
@@ -206,11 +239,17 @@ async function getUserResults(req, res) {
         const users = await readUsers();
         const user = users.find((u) => u.email === email);
 
+        // Check if user exists
         if (!user) {
             return res.status(404).json({ message: 'User not found.' });
         }
 
-        res.json({ user });
+        // Return user results
+        res.json({
+            name: user.name,
+            email: user.email,
+            history: user.history || []
+        });
     } catch (error) {
         console.error('Error fetching user results:', error);
         res.status(500).json({ message: 'Internal server error.' });
@@ -221,7 +260,8 @@ async function getUserResults(req, res) {
 async function saveAnswer(req, res) {
     const { email, question, selectedAnswer, isCorrect } = req.body;
 
-    if (!email || !question || !selectedAnswer) {
+    // Validate input
+    if (!email || !question || !selectedAnswer === undefined) {
         return res.status(400).json({ message: 'Missing required fields.' });
     }
 
@@ -229,18 +269,31 @@ async function saveAnswer(req, res) {
         const users = await readUsers();
         const user = users.find((u) => u.email === email);
 
+        // Check if user exists
         if (!user) {
             return res.status(404).json({ message: 'User not found.' });
         }
 
-        if (!user.history) {
-            user.history = [];
-        }
+        // Ensure history exists
+        user.history = user.history || [];
 
-        user.history.push({ question, selectedAnswer, isCorrect, date: new Date().toISOString() });
+        // Add new answer to history
+        const answerEntry = {
+            question,
+            selectedAnswer,
+            isCorrect,
+            date: new Date().toISOString()
+        };
+        user.history.push(answerEntry);
+
+        // Save updated users
         await writeUsers(users);
 
-        res.json({ message: 'Answer saved successfully.', user });
+        // Respond with success message
+        res.status(200).json({
+            message: 'Answer saved successfully.',
+            answer: answerEntry
+        });
     } catch (error) {
         console.error('Error saving answer:', error);
         res.status(500).json({ message: 'Internal server error.' });
