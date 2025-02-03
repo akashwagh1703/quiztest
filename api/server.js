@@ -6,6 +6,12 @@ import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 
+
+// Serve static files from the Vite build output
+const DIST_DIR = path.resolve('dist');
+app.use(express.static(DIST_DIR));
+
+
 const app = express();
 const USERS_FILE = path.resolve('public', 'users.json');
 const JWT_SECRET = process.env.JWT_SECRET || '123456789';
@@ -123,6 +129,11 @@ app.post('/save-answer', (req, res) => {
         console.error('Error saving answer:', error);
         res.status(500).json({ message: 'Internal server error.' });
     }
+});
+
+// Catch-all route to serve the Vite app
+app.get('*', (req, res) => {
+    res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
 
 export default app;
