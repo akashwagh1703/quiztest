@@ -164,13 +164,6 @@ app.post('/save-answer', (req, res) => {
 });
 
 // Start the server
-// app.listen(PORT, () => {
-//     console.log(`Server running at http://localhost:${PORT}`);
-// });
-
-// Catch-all route to serve the Vite app
-// app.get('*', (req, res) => {
-//     res.sendFile(path.join(DIST_DIR, 'index.html'));
-// });
-
-export default app;
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+});
