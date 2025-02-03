@@ -4,4 +4,4 @@
 
 // LIVE
 export const BASEURL = "https://quiztest-theta.vercel.app";
-export const APIURL = "https://quiztest-theta.vercel.app/api";
+export const APIURL = "https://quiztest-theta.vercel.app/api/server";
