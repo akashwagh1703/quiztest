@@ -9,5 +9,6 @@
 // export const APIURL = "http://localhost:5000/";
 
 // LIVE
+// LIVE
 export const BASEURL = "https://quiztest-nu.vercel.app";
-export const APIURL = "https://quiztest-nu.vercel.app/api/server";
+export const APIURL = "https://quiztest-nu.vercel.app/api";
