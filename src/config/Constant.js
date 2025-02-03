@@ -10,4 +10,4 @@
 
 // LIVE
 export const BASEURL = "https://quiztest-roan.vercel.app";
-export const APIURL = "https://quiztest-roan.vercel.app/api/";
+export const APIURL = "https://quiztest-roan.vercel.app:5000/";
