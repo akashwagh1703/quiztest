@@ -165,4 +165,6 @@ app.post('/save-answer', (req, res) => {
 });
 
 // Export the handler for Vercel
-export default app;
+export default (req, res) => {
+    app(req, res);
+};
