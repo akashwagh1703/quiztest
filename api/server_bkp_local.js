@@ -167,10 +167,10 @@ app.post('/save-answer', (req, res) => {
 
 
 // Start the server
-// app.listen(PORT, () => {
-//     console.log(`Server running at http://localhost:${PORT}`);
-// });
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+});
 // // Export the handler for Vercel
-export default (req, res) => {
-    app(req, res);
-};
+// export default (req, res) => {
+//     app(req, res);
+// };
