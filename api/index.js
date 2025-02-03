@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import jwt from 'jsonwebtoken';
+import os from 'os';
 
 // Use a more reliable path resolution
 const USERS_FILE = path.join(process.cwd(), 'public', 'users.json');
@@ -29,15 +30,28 @@ const readUsers = async () => {
     }
 };
 
+// const writeUsers = async (users) => {
+//     try {
+//         // Ensure the directory exists
+//         await fs.mkdir(path.dirname(USERS_FILE), { recursive: true });
+
+//         await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2), 'utf8');
+//     } catch (error) {
+//         console.error('Error writing users file:', error);
+//         throw error;
+//     }
+// };
+
 const writeUsers = async (users) => {
     try {
-        // Ensure the directory exists
-        await fs.mkdir(path.dirname(USERS_FILE), { recursive: true });
+        // Use system's temp directory
+        const tempDir = os.tmpdir();
+        const tempFile = path.join(tempDir, 'users.json');
 
-        await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2), 'utf8');
+        await fs.writeFile(tempFile, JSON.stringify(users, null, 2), 'utf8');
+        console.log('File written to temp directory:', tempFile);
     } catch (error) {
-        console.error('Error writing users file:', error);
-        throw error;
+        console.error('Error writing file:', error);
     }
 };
 
