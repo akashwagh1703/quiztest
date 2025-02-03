@@ -5,9 +5,9 @@
 
 
 // Localhost
-export const BASEURL = "http://localhost";
-export const APIURL = "http://localhost:5000/";
+// export const BASEURL = "http://localhost";
+// export const APIURL = "http://localhost:5000/";
 
 // LIVE
-// export const BASEURL = "https://quiztest-nu.vercel.app";
-// export const APIURL = "https://quiztest-nu.vercel.app:5000/";
+export const BASEURL = "https://quiztest-nu.vercel.app";
+export const APIURL = "https://quiztest-nu.vercel.app:5000/";
