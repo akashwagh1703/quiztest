@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './QuizDashboard.css'; // Custom styles for the dashboard
 import Header from './Header';
 import Footer from './Footer';
+import { APIURL } from '../config/Constant';
 
 const QuizDashboard = () => {
     const user = JSON.parse(localStorage.getItem('userData')) || null;
@@ -18,7 +19,7 @@ const QuizDashboard = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/user-results?email=${user.email}`);
+                const response = await fetch(`${APIURL}/user-results?email=${user.email}`);
                 const data = await response.json();
 
                 if (response.ok) {

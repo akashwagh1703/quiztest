@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../component/Header';
 import Footer from '../component/Footer';
 import "./PastResults.css";
+import { APIURL } from '../config/Constant';
 
 const PastResults = ({ email }) => {
     const [results, setResults] = useState([]);
@@ -12,7 +13,7 @@ const PastResults = ({ email }) => {
         // Fetch user results from the backend
         const fetchResults = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/user-results?email=${email}`);
+                const response = await fetch(`${APIURL}/user-results?email=${email}`);
                 const data = await response.json();
 
                 if (response.ok) {

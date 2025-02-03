@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { APIURL } from '../config/Constant';
 
 const UserRegistration = () => {
     const [name, setName] = useState('');
@@ -51,7 +52,7 @@ const UserRegistration = () => {
         try {
             const userData = { name, email, phone, password }; // Plaintext password
 
-            const response = await fetch('http://localhost:5000/register', {
+            const response = await fetch(`${APIURL}/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData),

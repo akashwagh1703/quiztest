@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { APIURL } from "../config/Constant";
 
 const UserLogin = () => {
   const [email, setEmail] = useState("");
@@ -34,7 +35,7 @@ const UserLogin = () => {
     console.log('Password:', password); // Log password
 
     try {
-      const response = await fetch("http://localhost:5000/login", {
+      const response = await fetch(`${APIURL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
