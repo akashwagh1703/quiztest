@@ -13,7 +13,11 @@ const SaveResult = ({ email, score, outof, category }) => {
         setError('');
 
         try {
+<<<<<<< HEAD
             const response = await fetch(`${APIURL}save-result`, {
+=======
+            const response = await fetch(`${APIURL}/save-result`, {
+>>>>>>> 2b35f1e4cb5fc7e2c2e28ff9ce957f7b73e1dc16
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

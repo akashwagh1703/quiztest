@@ -12,7 +12,7 @@ const CameraTracking = () => {
     const streamRef = useRef(null);
     const idleTimeoutRef = useRef(null);
 
-    // Start camera stream
+
     const startCamera = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
@@ -23,7 +23,7 @@ const CameraTracking = () => {
             setIsCameraActive(true);
         } catch (err) {
             console.error("Error accessing camera:", err);
-            alert("Failed to access camera. Please check your permissions.");
+            alert("Failed to access camera. Please check.");
         }
     };
 

@@ -3,65 +3,14 @@
     "name": "Akash Wagh",
     "email": "akash.wagh@esds.co.in",
     "phone": "7020527719",
-    "password": "123456",
-    "history": [
-      {
-        "date": "2025-01-17T13:47:44.130Z",
-        "score": 17,
-        "outof": 30,
-        "category": "React JS Basics"
-      },
-      {
-        "date": "2025-01-17T13:54:22.963Z",
-        "score": 20,
-        "outof": 30,
-        "category": "React JS Basics"
-      },
-      {
-        "date": "2025-01-17T14:20:19.692Z",
-        "score": 14,
-        "outof": 32,
-        "category": "PHP"
-      },
-      {
-        "date": "2025-01-24T14:35:27.342Z",
-        "score": 49,
-        "outof": 62,
-        "category": "Full Stack Developer"
-      },
-      {
-        "date": "2025-01-31T13:57:45.498Z",
-        "score": 21,
-        "outof": 50,
-        "category": "AIBots"
-      }
-    ]
-  },
-  {
-    "name": "Devesh Jadhav",
-    "email": "devesh.jadhav@test.com",
-    "phone": "8754785478",
-    "password": "123456",
+    "password": "Akash@1703",
     "history": []
   },
   {
-    "name": "Devesh Jadhav",
-    "email": "deveshjadhav@gmail.com",
-    "phone": "8745698745",
-    "password": "123456",
-    "history": [
-      {
-        "date": "2025-01-31T13:18:25.728Z",
-        "score": 4,
-        "outof": 30,
-        "category": "ReactJS"
-      },
-      {
-        "date": "2025-01-31T13:22:04.132Z",
-        "score": 2,
-        "outof": 30,
-        "category": "ReactJS"
-      }
-    ]
+    "name": "Akash Wagh",
+    "email": "akash.wagh09@gmail.com",
+    "phone": "7020527719",
+    "password": "Akash@123",
+    "history": []
   }
 ]
