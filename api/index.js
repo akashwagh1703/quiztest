@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 import os from 'os';
 
 // Use a more reliable path resolution
@@ -109,8 +110,31 @@ export default async function handler(req, res) {
 async function registerUser(req, res) {
     const { name, email, phone, password } = req.body;
 
+    // Validate all required fields
     if (!name || !email || !phone || !password) {
         return res.status(400).json({ message: 'All fields are required.' });
+    }
+
+    // Validate name length
+    if (name.trim().length < 2 || name.trim().length > 100) {
+        return res.status(400).json({ message: 'Name must be between 2 and 100 characters.' });
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ message: 'Please enter a valid email address.' });
+    }
+
+    // Validate phone format
+    const phoneRegex = /^[0-9+\-\s()]{10,15}$/;
+    if (!phoneRegex.test(phone)) {
+        return res.status(400).json({ message: 'Please enter a valid phone number.' });
+    }
+
+    // Validate password length
+    if (password.length < 6 || password.length > 128) {
+        return res.status(400).json({ message: 'Password must be between 6 and 128 characters.' });
     }
 
     try {
@@ -122,14 +146,24 @@ async function registerUser(req, res) {
             return res.status(400).json({ message: 'Email already registered.' });
         }
 
-        // Save new user without hashing the password
-        users.push({ name, email: normalizedEmail, phone, password, history: [] });
+        // Hash the password before storing
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Save new user with hashed password
+        users.push({
+            name: name.trim(),
+            email: normalizedEmail,
+            phone: phone.trim(),
+            password: hashedPassword,
+            history: [],
+            createdAt: new Date().toISOString()
+        });
         await writeUsers(users);
 
         res.status(201).json({ message: 'User registered successfully.' });
     } catch (error) {
         console.error('Registration error:', error);
-        res.status(500).json({ message: 'Failed to register user.' });
+        res.status(500).json({ message: 'Failed to register user. Please try again.' });
     }
 }
 
@@ -155,16 +189,22 @@ async function loginUser(req, res) {
             return res.status(401).json({ message: 'Invalid email or password.' });
         }
 
-        // Simple password comparison (consider using bcrypt in production)
-        if (password !== user.password) {
+        // Compare password with hashed password using bcrypt
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
             return res.status(401).json({ message: 'Invalid email or password.' });
         }
 
-        // Generate JWT token
+        // Generate JWT token with more user data
         const token = jwt.sign(
-            { email: user.email, name: user.name },
+            {
+                email: user.email,
+                name: user.name,
+                phone: user.phone
+            },
             JWT_SECRET,
-            { expiresIn: '1h' }
+            { expiresIn: '24h' } // Extended to 24 hours for better UX
         );
 
         // Respond with user info and token
@@ -172,13 +212,14 @@ async function loginUser(req, res) {
             message: 'Login successful.',
             user: {
                 email: user.email,
-                name: user.name
+                name: user.name,
+                phone: user.phone
             },
             token,
         });
     } catch (error) {
         console.error('Login error:', error);
-        res.status(500).json({ message: 'Internal server error.' });
+        res.status(500).json({ message: 'An error occurred during login. Please try again.' });
     }
 }
 
@@ -260,8 +301,8 @@ async function getUserResults(req, res) {
 async function saveAnswer(req, res) {
     const { email, question, selectedAnswer, isCorrect } = req.body;
 
-    // Validate input
-    if (!email || !question || !selectedAnswer === undefined) {
+    // Validate input - Fixed logic error
+    if (!email || !question || selectedAnswer === undefined) {
         return res.status(400).json({ message: 'Missing required fields.' });
     }
 
